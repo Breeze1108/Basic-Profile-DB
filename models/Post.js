@@ -2,9 +2,10 @@ const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema(
     {
-        name: {type: String, default:""},
-        birthyear: {type: Number, default: 0},
-        status: {type: Boolean, default: false},
+        image: {type: String, default: "" },
+        likes: {type: Number, default: 0},
+        caption: {type: String, default: ""},
+        username: {type: String, default: ""},
     },
     {
         timestamps: {
@@ -16,6 +17,6 @@ const schema = new mongoose.Schema(
         }
 );
 
-const ProfileModel = mongoose.model('profiles-challenge', schema);
+const PostModel = mongoose.model('post-model', schema);
 
-module.exports = ProfileModel;
+module.exports = PostModel;

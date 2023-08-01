@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require("express");
 const cors = require("cors");
 const mongoose = require('mongoose');
-const ProfileModel = require('./models/Profiles');
+const PostModel = require('./models/Post');
 
 
 const app = express();
@@ -14,33 +14,33 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 mongoose.set('strictQuery', true);
-mongoose.connect(process.env.MONGO_DB_URI)
+mongoose.connect(process.env.MONGO_URL)
     .then(() => {console.log('Connected to MongoDB')}, err => {console.log(`Cannot connect to DB ${err}`)});
 
 
 app.get('/', (req, res) => res.status(200).send('Server Is Running.'));
 
-app.post('/add-profile', (req, res) => {
+app.post('/add-post', (req, res) => {
     const incomingData = req.body;
     try {
-        const newProfile = new ProfileModel(incomingData);
-        newProfile.save();
+        const newPost = new PostModel(incomingData);
+        newPost.save();
 
         res.status(200).send({
             message: 'saved',
-            profile: incomingData
+            // profile: incomingData
         })
     } catch (err) {
         console.log(err);
     }
 });
 
-app.get('/get-all-profiles', async (req, res) => { 
+app.get('/get-all-posts', async (req, res) => { 
     try {
-        const allProfiles = await ProfileModel.find()
+        const allPosts = await PostModel.find()
         res.status(200).send({
-            message: 'profiles-retrieved',
-            profile: allProfiles,
+            message: 'posts-retrieved',
+            profile: allPosts,
         })
     }
         catch (err) {
@@ -48,13 +48,13 @@ app.get('/get-all-profiles', async (req, res) => {
     } 
 });
 
-app.delete("/profiles/:id", async (req, res) => {
+app.delete("/post/:id", async (req, res) => {
     const id = req.params.id;
     try {
-        const deletedProfile = await ProfileModel.findByIdAndDelete({_id:id})
+        const deletedPost = await PostModel.findByIdAndDelete({_id:id})
         res.status(200).send({
             message: 'deleted',
-            userId: deletedProfile
+            userId: deletedPost
     
         });
     }
